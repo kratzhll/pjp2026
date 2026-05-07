@@ -19,10 +19,10 @@ def conectar():
 
 def abrir_cadastro(parent, editora_id=None):
     janela_cad = tk.Toplevel(parent)
-    janela_cad.title("Editar Categoria" if editora_id else "Cadastrar Categoria")
+    janela_cad.title("Editar Editora" if editora_id else "Cadastrar Editora")
     janela_cad.geometry("350x200")
     
-    tk.Label(janela_cad, text="Nome da Categoria:", font=("Arial", 10)).pack(pady=10)
+    tk.Label(janela_cad, text="Nome da Editora:", font=("Arial", 10)).pack(pady=10)
     ent_nome = tk.Entry(janela_cad, width=30)
     ent_nome.pack(pady=5)
 
@@ -48,11 +48,11 @@ def abrir_cadastro(parent, editora_id=None):
         if editora_id:
             # Lógica de Atualização
             cursor.execute("UPDATE editora SET editora_nome = ? WHERE editora_id = ?", (nome, editora_id))
-            mensagem = "Categoria atualizada com sucesso!"
+            mensagem = "Editora atualizada com sucesso!"
         else:
             # Lógica de Inserção
             cursor.execute("INSERT INTO editora (editora_nome) VALUES (?)", (nome,))
-            mensagem = "Categoria cadastrada com sucesso!"
+            mensagem = "Editora cadastrada com sucesso!"
             
         conn.commit()
         conn.close()
@@ -70,10 +70,10 @@ def abrir_consulta(parent):
     janela_con.geometry("500x480") 
 
     # 1. Tabela (Treeview)
-    colunas = ("ID", "Nome da Categoria")
+    colunas = ("ID", "Nome da Editora")
     tabela = ttk.Treeview(janela_con, columns=colunas, show="headings")
     tabela.heading("ID", text="ID")
-    tabela.heading("Nome da Categoria", text="Nome da Categoria")
+    tabela.heading("Nome da Editora", text="Nome da Editora")
     tabela.column("ID", width=50, anchor="center")
     tabela.pack(pady=20, padx=10, fill="both", expand=True)
 
@@ -82,7 +82,7 @@ def abrir_consulta(parent):
         item_selecionado = tabela.selection()
         
         if not item_selecionado:
-            messagebox.showwarning("Aviso", "Por favor, selecione uma categoria na lista!")
+            messagebox.showwarning("Aviso", "Por favor, selecione uma Editora na lista!")
             return
 
         valores = tabela.item(item_selecionado, "values")
