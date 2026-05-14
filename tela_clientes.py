@@ -2,7 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 import banco_dados as bd
 
-def montar_tela_categorias(container, funcao_voltar):
+def montar_tela_clientes(container, funcao_voltar):
+
     for widget in container.winfo_children():
         widget.destroy()
 
@@ -17,43 +18,65 @@ def montar_tela_categorias(container, funcao_voltar):
     # --- TÍTULO ---
     tk.Label(
         container,
-        text="Cadastro de Categorias",
+        text="Gerenciar Clientes",
         font=("Arial", 14, "bold")
     ).pack(pady=10)
 
     # --- FORMULÁRIO ---
+
+    # NOME
     tk.Label(
         container,
-        text="Nome da Categoria:",
+        text="Nome do Cliente:",
         font=("Arial", 10, "bold")
     ).pack(pady=5)
 
-    ent_categorias = tk.Entry(container, width=40)
-    ent_categorias.pack()
+    ent_nome = tk.Entry(container, width=40)
+    ent_nome.pack()
 
+    # CIDADE
     tk.Label(
         container,
-        text="Descrição:",
+        text="Cidade:",
         font=("Arial", 10, "bold")
     ).pack(pady=5)
 
-    ent_descricao = tk.Entry(container, width=40)
-    ent_descricao.pack()
+    ent_cidade = tk.Entry(container, width=40)
+    ent_cidade.pack()
 
+    # EMAIL
+    tk.Label(
+        container,
+        text="Email:",
+        font=("Arial", 10, "bold")
+    ).pack(pady=5)
+
+    ent_email = tk.Entry(container, width=40)
+    ent_email.pack()
+
+    # SALVAR
     def salvar():
-        categorias = ent_categorias.get()
-        descricao = ent_descricao.get()
 
-        if categorias and descricao:
-            bd.db_cadastrar_categorias(categorias, descricao)
+        nome_cliente = ent_nome.get()
+        cidade = ent_cidade.get()
+        email = ent_email.get()
+
+        if nome_cliente and cidade and email:
+
+            bd.db_cadastrar_cliente(
+                nome_cliente,
+                cidade,
+                email
+            )
 
             messagebox.showinfo(
                 "Sucesso",
-                "Categoria cadastrada com sucesso!"
+                "Cliente cadastrado com sucesso!"
             )
 
-            ent_categorias.delete(0, tk.END)
-            ent_descricao.delete(0, tk.END)
+            ent_nome.delete(0, tk.END)
+            ent_cidade.delete(0, tk.END)
+            ent_email.delete(0, tk.END)
 
             atualizar_lista()
 
@@ -65,16 +88,16 @@ def montar_tela_categorias(container, funcao_voltar):
 
     tk.Button(
         container,
-        text="Cadastrar Categoria",
+        text="Cadastrar Cliente",
         command=salvar,
         bg="green",
         fg="white"
     ).pack(pady=10)
 
-    # --- LISTA DE CATEGORIAS ---
+    # --- LISTA ---
     tk.Label(
         container,
-        text="Categorias Cadastradas:",
+        text="Clientes Cadastrados:",
         font=("Arial", 10, "bold")
     ).pack(pady=10)
 
@@ -83,13 +106,12 @@ def montar_tela_categorias(container, funcao_voltar):
 
     def atualizar_lista():
 
-        # Limpa a lista antes de atualizar
         for widget in lista_frame.winfo_children():
             widget.destroy()
 
-        categorias = bd.db_listar_categorias()
+        clientes = bd.db_listar_clientes()
 
-        for c in categorias:
+        for c in clientes:
 
             btn_del = tk.Button(
                 lista_frame,
@@ -101,7 +123,12 @@ def montar_tela_categorias(container, funcao_voltar):
 
             btn_del.grid(row=c[0], column=0, padx=5, pady=2)
 
-            texto = f"ID: {c[0]} | Categoria: {c[1]}"
+            texto = (
+                f"ID: {c[0]} | "
+                f"Nome: {c[1]} | "
+                f"Cidade: {c[2]} | "
+                f"Email: {c[3]}"
+            )
 
             tk.Label(
                 lista_frame,
@@ -112,10 +139,11 @@ def montar_tela_categorias(container, funcao_voltar):
 
         if messagebox.askyesno(
             "Confirmar",
-            "Deseja excluir esta categoria?"
+            "Deseja excluir este cliente?"
         ):
 
-            bd.db_deletar_categorias(id_c)
+            bd.db_deletar_cliente(id_c)
+
             atualizar_lista()
 
     atualizar_lista()
