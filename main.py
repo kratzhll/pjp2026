@@ -1,19 +1,43 @@
 import tkinter as tk
-from tela_login import montar_tela_login
-from tela_principal import montar_tela_principal
+from tela_livro import montar_tela_livro
+from tela_categorias import montar_tela_categorias
+from tela_emp import montar_tela_emprestimo
+from tela_clientes import montar_tela_clientes
 
-def validar_e_entrar(usuario):
-# Lógica de validação simples
 
-    if usuario == "admin":
-        montar_tela_principal(root) 
-    else:
-        print("Usuário incorreto!")
+def montar_menu_principal():
+    # Limpa a tela para voltar ao menu
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    tk.Label(root, text="Bem-vindo ao Sistema", font=("Arial", 16)).pack(pady=20)
+    
+    # Passamos a função 'montar_menu_principal' para a tela de livro
+    tk.Button(root, text="Abrir Cadastro de Clientes", 
+              command=lambda: montar_tela_clientes(root, montar_menu_principal), 
+              width=30, height=2).pack(pady=10)
+   
+ # Passamos a função 'montar_menu_principal' para a tela de livro  
+    tk.Button(root, text="Abrir Cadastro de Livros", 
+              command=lambda: montar_tela_livro(root, montar_menu_principal), 
+              width=30, height=2).pack(pady=10)
+    
+    
+    # Passamos a função 'montar_menu_principal' para a tela de livro
+    tk.Button(root, text="Abrir Cadastro de Categorias", 
+              command=lambda: montar_tela_categorias(root, montar_menu_principal), 
+              width=30, height=2).pack(pady=10)
+    
+    # Passamos a função 'montar_menu_principal' para a tela de livro
+    tk.Button(root, text="Abrir Gerenciamento de Empréstimos", 
+              command=lambda: montar_tela_emprestimo(root, montar_menu_principal), 
+              width=30, height=2).pack(pady=10)
 
 root = tk.Tk()
-root.title("Tela Login")
-root.geometry("300x250")
+root.title("Sistema de Biblioteca Escolar")
+root.geometry("500x600")
 
-montar_tela_login(root, validar_e_entrar)
+# Inicia o sistema desenhando o menu
+montar_menu_principal()
 
 root.mainloop()
